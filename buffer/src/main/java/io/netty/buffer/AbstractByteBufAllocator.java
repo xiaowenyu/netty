@@ -109,6 +109,7 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
         return heapBuffer();
     }
 
+    //内存分配入口
     @Override
     public ByteBuf buffer(int initialCapacity) {
         if (directByDefault) {
@@ -173,6 +174,7 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
         return directBuffer(DEFAULT_INITIAL_CAPACITY, DEFAULT_MAX_CAPACITY);
     }
 
+    // 直接内存分配
     @Override
     public ByteBuf directBuffer(int initialCapacity) {
         return directBuffer(initialCapacity, DEFAULT_MAX_CAPACITY);
@@ -184,6 +186,7 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
             return emptyBuf;
         }
         validate(initialCapacity, maxCapacity);
+        // 分配直接内存
         return newDirectBuffer(initialCapacity, maxCapacity);
     }
 
@@ -247,6 +250,7 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
         return StringUtil.simpleClassName(this) + "(directByDefault: " + directByDefault + ')';
     }
 
+    // 内存计算
     @Override
     public int calculateNewCapacity(int minNewCapacity, int maxCapacity) {
         checkPositiveOrZero(minNewCapacity, "minNewCapacity");

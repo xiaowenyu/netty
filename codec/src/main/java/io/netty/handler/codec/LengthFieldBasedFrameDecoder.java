@@ -338,6 +338,7 @@ public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder {
     private void discardingTooLongFrame(ByteBuf in) {
         long bytesToDiscard = this.bytesToDiscard;
         int localBytesToDiscard = (int) Math.min(bytesToDiscard, in.readableBytes());
+        //调过n字节
         in.skipBytes(localBytesToDiscard);
         bytesToDiscard -= localBytesToDiscard;
         this.bytesToDiscard = bytesToDiscard;
@@ -393,7 +394,9 @@ public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder {
      * @return  frame           the {@link ByteBuf} which represent the frame or {@code null} if no frame could
      *                          be created.
      */
+    //解码
     protected Object decode(ChannelHandlerContext ctx, ByteBuf in) throws Exception {
+        //丢弃太长的buf
         if (discardingTooLongFrame) {
             discardingTooLongFrame(in);
         }
@@ -402,7 +405,9 @@ public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder {
             return null;
         }
 
+        // 得到真实的 长度的内存地址
         int actualLengthFieldOffset = in.readerIndex() + lengthFieldOffset;
+        // 获得长度
         long frameLength = getUnadjustedFrameLength(in, actualLengthFieldOffset, lengthFieldLength, byteOrder);
 
         if (frameLength < 0) {
@@ -422,6 +427,7 @@ public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder {
 
         // never overflows because it's less than maxFrameLength
         int frameLengthInt = (int) frameLength;
+        //
         if (in.readableBytes() < frameLengthInt) {
             return null;
         }
@@ -432,6 +438,7 @@ public class LengthFieldBasedFrameDecoder extends ByteToMessageDecoder {
         in.skipBytes(initialBytesToStrip);
 
         // extract frame
+        // 提取帧
         int readerIndex = in.readerIndex();
         int actualFrameLength = frameLengthInt - initialBytesToStrip;
         ByteBuf frame = extractFrame(ctx, in, readerIndex, actualFrameLength);

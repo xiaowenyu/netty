@@ -1221,6 +1221,7 @@ public abstract class ByteBuf implements ReferenceCounted, Comparable<ByteBuf> {
      *         if {@code srcIndex + length} is greater than
      *            {@code src.capacity}
      */
+    // 转移数据
     public abstract ByteBuf setBytes(int index, ByteBuf src, int srcIndex, int length);
 
     /**

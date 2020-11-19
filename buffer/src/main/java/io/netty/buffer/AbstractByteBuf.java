@@ -887,6 +887,7 @@ public abstract class AbstractByteBuf extends ByteBuf {
     @Override
     public ByteBuf readRetainedSlice(int length) {
         checkReadableBytes(length);
+        // 获得切片
         ByteBuf slice = retainedSlice(readerIndex, length);
         readerIndex += length;
         return slice;

@@ -61,6 +61,7 @@ public class UnpooledDirectByteBuf extends AbstractReferenceCountedByteBuf {
         }
 
         this.alloc = alloc;
+        //设置byteBuffer
         setByteBuffer(allocateDirect(initialCapacity), false);
     }
 
@@ -435,6 +436,7 @@ public class UnpooledDirectByteBuf extends AbstractReferenceCountedByteBuf {
     public ByteBuf setBytes(int index, ByteBuf src, int srcIndex, int length) {
         checkSrcIndex(index, length, srcIndex, src.capacity());
         if (src.nioBufferCount() > 0) {
+            // 复制ByteBuffer
             for (ByteBuffer bb: src.nioBuffers(srcIndex, length)) {
                 int bbLen = bb.remaining();
                 setBytes(index, bb);
@@ -463,7 +465,9 @@ public class UnpooledDirectByteBuf extends AbstractReferenceCountedByteBuf {
             src = src.duplicate();
         }
 
+        // 重新设置刻度位置和可用上限位置
         tmpBuf.clear().position(index).limit(index + src.remaining());
+        // 复制内存
         tmpBuf.put(src);
         return this;
     }
