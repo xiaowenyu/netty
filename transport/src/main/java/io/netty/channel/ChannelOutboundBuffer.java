@@ -112,6 +112,7 @@ public final class ChannelOutboundBuffer {
      * the message was written.
      */
     public void addMessage(Object msg, int size, ChannelPromise promise) {
+        // 封装entry对象
         Entry entry = Entry.newInstance(msg, size, total(msg), promise);
         if (tailEntry == null) {
             flushedEntry = null;
@@ -120,7 +121,9 @@ public final class ChannelOutboundBuffer {
             tail.next = entry;
         }
         tailEntry = entry;
+        // 插入到队尾
         if (unflushedEntry == null) {
+            // 如果为空链表，则初始化未刷新节点
             unflushedEntry = entry;
         }
 
@@ -172,6 +175,7 @@ public final class ChannelOutboundBuffer {
             return;
         }
 
+        // 设置写缓冲区的水位线，大于则
         long newWriteBufferSize = TOTAL_PENDING_SIZE_UPDATER.addAndGet(this, size);
         if (newWriteBufferSize > channel.config().getWriteBufferHighWaterMark()) {
             setUnwritable(invokeLater);
@@ -599,11 +603,13 @@ public final class ChannelOutboundBuffer {
     }
 
     private void setUnwritable(boolean invokeLater) {
+        // 循环设置不可写状态
         for (;;) {
             final int oldValue = unwritable;
             final int newValue = oldValue | 1;
             if (UNWRITABLE_UPDATER.compareAndSet(this, oldValue, newValue)) {
                 if (oldValue == 0) {
+                    //变不可写
                     fireChannelWritabilityChanged(invokeLater);
                 }
                 break;
@@ -625,6 +631,7 @@ public final class ChannelOutboundBuffer {
             }
             channel.eventLoop().execute(task);
         } else {
+            // 可写状态改变
             pipeline.fireChannelWritabilityChanged();
         }
     }

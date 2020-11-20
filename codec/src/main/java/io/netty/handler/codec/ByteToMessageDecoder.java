@@ -267,7 +267,7 @@ public abstract class ByteToMessageDecoder extends ChannelInboundHandlerAdapter 
      */
     protected void handlerRemoved0(ChannelHandlerContext ctx) throws Exception { }
 
-    // Decoder入口, 子类 * {@link DelimiterBasedFrameDecoder}, {@link FixedLengthFrameDecoder}, {@link LengthFieldBasedFrameDecoder},
+    // Decoder和读入口, 子类 * {@link DelimiterBasedFrameDecoder}, {@link FixedLengthFrameDecoder}, {@link LengthFieldBasedFrameDecoder},
     // * or {@link LineBasedFrameDecoder
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {

@@ -109,7 +109,7 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
         return heapBuffer();
     }
 
-    //内存分配入口
+    //读内存分配入口
     @Override
     public ByteBuf buffer(int initialCapacity) {
         if (directByDefault) {
@@ -126,6 +126,7 @@ public abstract class AbstractByteBufAllocator implements ByteBufAllocator {
         return heapBuffer(initialCapacity, maxCapacity);
     }
 
+    // 分配写缓冲区入口
     @Override
     public ByteBuf ioBuffer() {
         if (PlatformDependent.hasUnsafe() || isDirectBufferPooled()) {

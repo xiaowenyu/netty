@@ -928,6 +928,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelPipeline fireChannelWritabilityChanged() {
+        // 从头开始改变可写状态
         AbstractChannelHandlerContext.invokeChannelWritabilityChanged(head);
         return this;
     }
@@ -1017,6 +1018,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelFuture writeAndFlush(Object msg, ChannelPromise promise) {
+        // 写
         return tail.writeAndFlush(msg, promise);
     }
 
@@ -1309,6 +1311,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         HeadContext(DefaultChannelPipeline pipeline) {
             super(pipeline, null, HEAD_NAME, HeadContext.class);
+            // 可以直接访问内存的对象
             unsafe = pipeline.channel().unsafe();
             setAddComplete();
         }
@@ -1364,11 +1367,13 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         @Override
         public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) {
+            // 写
             unsafe.write(msg, promise);
         }
 
         @Override
         public void flush(ChannelHandlerContext ctx) {
+            // 刷
             unsafe.flush();
         }
 

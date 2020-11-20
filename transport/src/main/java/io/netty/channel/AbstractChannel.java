@@ -294,6 +294,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
         return pipeline.writeAndFlush(msg);
     }
 
+    // 编码、写buffer和promise入口
     @Override
     public ChannelFuture writeAndFlush(Object msg, ChannelPromise promise) {
         return pipeline.writeAndFlush(msg, promise);
@@ -416,6 +417,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
      */
     protected abstract class AbstractUnsafe implements Unsafe {
 
+        // 写缓冲区
         private volatile ChannelOutboundBuffer outboundBuffer = new ChannelOutboundBuffer(AbstractChannel.this);
         private RecvByteBufAllocator.Handle recvHandle;
         private boolean inFlush0;
@@ -889,6 +891,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
                 return;
             }
 
+            // 加到缓冲区中
             outboundBuffer.addMessage(msg, size, promise);
         }
 
@@ -906,6 +909,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
         }
 
         @SuppressWarnings("deprecation")
+        // 刷新缓存
         protected void flush0() {
             if (inFlush0) {
                 // Avoid re-entrance

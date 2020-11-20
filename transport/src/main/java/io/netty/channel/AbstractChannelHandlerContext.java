@@ -422,6 +422,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         return this;
     }
 
+    // 选择线程执行任务
     static void invokeChannelWritabilityChanged(final AbstractChannelHandlerContext next) {
         EventExecutor executor = next.executor();
         if (executor.inEventLoop()) {
@@ -714,6 +715,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
 
     private void invokeWrite0(Object msg, ChannelPromise promise) {
         try {
+            // 拿到绑定的handler
             ((ChannelOutboundHandler) handler()).write(this, msg, promise);
         } catch (Throwable t) {
             notifyOutboundHandlerException(t, promise);
@@ -745,6 +747,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         }
     }
 
+    //刷新
     private void invokeFlush0() {
         try {
             ((ChannelOutboundHandler) handler()).flush(this);
@@ -755,11 +758,13 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
 
     @Override
     public ChannelFuture writeAndFlush(Object msg, ChannelPromise promise) {
+        // 以刷新的方式写缓存
         write(msg, true, promise);
         return promise;
     }
 
     void invokeWriteAndFlush(Object msg, ChannelPromise promise) {
+        //TODO ???
         if (invokeHandler()) {
             invokeWrite0(msg, promise);
             invokeFlush0();
@@ -787,6 +792,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         EventExecutor executor = next.executor();
         if (executor.inEventLoop()) {
             if (flush) {
+                // flush
                 next.invokeWriteAndFlush(m, promise);
             } else {
                 next.invokeWrite(m, promise);
@@ -873,6 +879,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         return false;
     }
 
+    // 循环选择执行的handler
     private AbstractChannelHandlerContext findContextInbound(int mask) {
         AbstractChannelHandlerContext ctx = this;
         EventExecutor currentExecutor = executor();
@@ -1115,6 +1122,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         private final Runnable invokeChannelWritableStateChangedTask = new Runnable() {
             @Override
             public void run() {
+                // 并不断选择下一个handler来执行
                 next.invokeChannelWritabilityChanged();
             }
         };

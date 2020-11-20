@@ -95,6 +95,7 @@ public abstract class MessageToByteEncoder<I> extends ChannelOutboundHandlerAdap
         return matcher.match(msg);
     }
 
+    // Message to byte
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
         ByteBuf buf = null;
@@ -102,8 +103,10 @@ public abstract class MessageToByteEncoder<I> extends ChannelOutboundHandlerAdap
             if (acceptOutboundMessage(msg)) {
                 @SuppressWarnings("unchecked")
                 I cast = (I) msg;
+                // 分配写缓冲区
                 buf = allocateBuffer(ctx, cast, preferDirect);
                 try {
+                    // 编码
                     encode(ctx, cast, buf);
                 } finally {
                     ReferenceCountUtil.release(cast);
@@ -152,6 +155,7 @@ public abstract class MessageToByteEncoder<I> extends ChannelOutboundHandlerAdap
      * @param out           the {@link ByteBuf} into which the encoded message will be written
      * @throws Exception    is thrown if an error occurs
      */
+    // 编码到buf中
     protected abstract void encode(ChannelHandlerContext ctx, I msg, ByteBuf out) throws Exception;
 
     protected boolean isPreferDirect() {
