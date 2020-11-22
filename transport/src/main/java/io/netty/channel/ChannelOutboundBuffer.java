@@ -268,11 +268,13 @@ public final class ChannelOutboundBuffer {
         ChannelPromise promise = e.promise;
         int size = e.pendingSize;
 
+        //移除entry节点
         removeEntry(e);
 
         if (!e.cancelled) {
             // only release message, notify and decrement if it was not canceled before.
             ReferenceCountUtil.safeRelease(msg);
+            // 调用成功的回调
             safeSuccess(promise);
             decrementPendingOutboundBytes(size, false, true);
         }

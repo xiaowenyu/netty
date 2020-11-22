@@ -905,6 +905,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
             }
 
             outboundBuffer.addFlush();
+            // 刷
             flush0();
         }
 

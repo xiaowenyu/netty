@@ -216,6 +216,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
         if (msg instanceof ByteBuf) {
             ByteBuf buf = (ByteBuf) msg;
             if (!buf.isReadable()) {
+                // 删除entry节点
                 in.remove();
                 return 0;
             }
@@ -261,6 +262,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
                 // Directly return here so incompleteWrite(...) is not called.
                 return;
             }
+            // 循环处理结果
             writeSpinCount -= doWriteInternal(in, msg);
         } while (writeSpinCount > 0);
 
