@@ -21,6 +21,7 @@ import java.util.concurrent.ThreadFactory;
 /**
  * {@link MultithreadEventLoopGroup} which must be used for the local transport.
  */
+//不论是服务器端还是客户端, 都必须指定 EventLoopGroup。
 public class DefaultEventLoopGroup extends MultithreadEventLoopGroup {
 
     /**

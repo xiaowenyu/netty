@@ -43,6 +43,7 @@ import java.util.Map;
  * A {@link io.netty.channel.socket.ServerSocketChannel} implementation which uses
  * NIO selector based implementation to accept new connections.
  */
+// 异步非阻塞的服务器端 TCP Socket 连接。
 public class NioServerSocketChannel extends AbstractNioMessageChannel
                              implements io.netty.channel.socket.ServerSocketChannel {
 
