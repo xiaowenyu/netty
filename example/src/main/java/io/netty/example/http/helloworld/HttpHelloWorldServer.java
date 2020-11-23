@@ -47,6 +47,7 @@ public final class HttpHelloWorldServer {
         }
 
         // Configure the server.
+        //线程池组
         EventLoopGroup bossGroup = new NioEventLoopGroup(1);
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {

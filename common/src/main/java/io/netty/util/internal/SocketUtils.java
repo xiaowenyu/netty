@@ -102,6 +102,7 @@ public final class SocketUtils {
             AccessController.doPrivileged(new PrivilegedExceptionAction<Void>() {
                 @Override
                 public Void run() throws IOException {
+                    // 绑定地址
                     socketChannel.bind(address);
                     return null;
                 }

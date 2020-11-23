@@ -69,6 +69,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
     /**
      * Specify the {@link EventLoopGroup} which is used for the parent (acceptor) and the child (client).
      */
+    // 只传一个group，就是boss 和 worker 都用1个group
     @Override
     public ServerBootstrap group(EventLoopGroup group) {
         return group(group, group);

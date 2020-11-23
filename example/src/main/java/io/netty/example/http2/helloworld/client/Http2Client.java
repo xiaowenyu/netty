@@ -91,6 +91,7 @@ public final class Http2Client {
             sslCtx = null;
         }
 
+        // 新建线程池组
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         Http2ClientInitializer initializer = new Http2ClientInitializer(sslCtx, Integer.MAX_VALUE);
 
