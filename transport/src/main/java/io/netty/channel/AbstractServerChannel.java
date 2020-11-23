@@ -34,6 +34,7 @@ public abstract class AbstractServerChannel extends AbstractChannel implements S
     /**
      * Creates a new instance.
      */
+    // 服务端通道初始化
     protected AbstractServerChannel() {
         super(null);
     }

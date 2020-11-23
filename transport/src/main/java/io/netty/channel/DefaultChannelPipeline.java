@@ -43,6 +43,7 @@ import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
  * The default {@link ChannelPipeline} implementation.  It is usually created
  * by a {@link Channel} implementation when the {@link Channel} is created.
  */
+// 双向链表
 public class DefaultChannelPipeline implements ChannelPipeline {
 
     static final InternalLogger logger = InternalLoggerFactory.getInstance(DefaultChannelPipeline.class);
@@ -94,6 +95,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         succeededFuture = new SucceededChannelFuture(channel, null);
         voidPromise =  new VoidChannelPromise(channel, true);
 
+        // 设置链表的前后节点，既是handler又是handlerContext
         tail = new TailContext(this);
         head = new HeadContext(this);
 
@@ -201,8 +203,10 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         synchronized (this) {
             checkMultiplicity(handler);
 
+            // handler 和 handlerContext一一对应
             newCtx = newContext(group, filterName(name, handler), handler);
 
+            // 插到tail之前
             addLast0(newCtx);
 
             // If the registered is false it means that the channel was not registered on an eventLoop yet.
@@ -810,8 +814,10 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         return buf.toString();
     }
 
+    // 传播注册通知
     @Override
     public final ChannelPipeline fireChannelRegistered() {
+        // 注册通知， head开始
         AbstractChannelHandlerContext.invokeChannelRegistered(head);
         return this;
     }
@@ -945,6 +951,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelFuture connect(SocketAddress remoteAddress, SocketAddress localAddress) {
+        // tail去连接
         return tail.connect(remoteAddress, localAddress);
     }
 
@@ -1309,6 +1316,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         private final Unsafe unsafe;
 
+        // 初始化head
         HeadContext(DefaultChannelPipeline pipeline) {
             super(pipeline, null, HEAD_NAME, HeadContext.class);
             // 可以直接访问内存的对象
