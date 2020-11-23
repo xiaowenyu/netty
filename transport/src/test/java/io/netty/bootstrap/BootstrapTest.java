@@ -347,6 +347,7 @@ public class BootstrapTest {
         }
         final CountDownLatch latch = new CountDownLatch(1);
         final Bootstrap bootstrap = new Bootstrap()
+                // pipeline注册入口
                 .handler(new ChannelInitializer<Channel>() {
                     @Override
                     protected void initChannel(Channel ch) {
