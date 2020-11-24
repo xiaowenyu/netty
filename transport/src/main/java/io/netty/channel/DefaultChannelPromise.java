@@ -38,6 +38,7 @@ public class DefaultChannelPromise extends DefaultPromise<Void> implements Chann
      * @param channel
      *        the {@link Channel} associated with this future
      */
+    // 一个promise 绑定一个channel
     public DefaultChannelPromise(Channel channel) {
         this.channel = checkNotNull(channel, "channel");
     }

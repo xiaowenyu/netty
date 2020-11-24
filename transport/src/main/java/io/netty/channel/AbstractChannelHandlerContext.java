@@ -449,6 +449,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
         }
     }
 
+    // 每个事件都新建一个回调对象，每个回调对象只属于一个通道， promise：channel = n ： 1
     @Override
     public ChannelFuture bind(SocketAddress localAddress) {
         return bind(localAddress, newPromise());
@@ -820,6 +821,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
     private static void notifyOutboundHandlerException(Throwable cause, ChannelPromise promise) {
         // Only log if the given promise is not of type VoidChannelPromise as tryFailure(...) is expected to return
         // false.
+        // 设置失败状态并唤醒监听者
         PromiseNotificationUtil.tryFailure(promise, cause, promise instanceof VoidChannelPromise ? null : logger);
     }
 
