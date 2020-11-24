@@ -61,6 +61,7 @@ public abstract class AbstractServerChannel extends AbstractChannel implements S
 
     @Override
     protected AbstractUnsafe newUnsafe() {
+        //server unsafe
         return new DefaultServerUnsafe();
     }
 

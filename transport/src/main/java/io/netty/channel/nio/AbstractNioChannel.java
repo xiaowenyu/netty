@@ -81,6 +81,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         this.ch = ch;
         this.readInterestOp = readInterestOp;
         try {
+            // 配置成非阻塞
             ch.configureBlocking(false);
         } catch (IOException e) {
             try {
@@ -377,6 +378,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         boolean selected = false;
         for (;;) {
             try {
+                // SocketChannel 注册到与 eventLoop 关联的 selector 上了，将当前 Channel 作为 attachment 与 SocketChannel 关联
                 selectionKey = javaChannel().register(eventLoop().unwrappedSelector(), 0, this);
                 return;
             } catch (CancelledKeyException e) {

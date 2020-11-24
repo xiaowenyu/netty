@@ -42,6 +42,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
         super(parent, ch, readInterestOp);
     }
 
+    // server端初始化这个
     @Override
     protected AbstractNioUnsafe newUnsafe() {
         return new NioMessageUnsafe();

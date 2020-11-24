@@ -369,6 +369,9 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         return selector.keys().size() - cancelledKeys;
     }
 
+    //1、创建一个新的 Selector。
+    // 2、将原来 Selector 中注册的事件全部取消。
+    // 3、将可用事件重新注册到新的 Selector 中，并激活。
     private void rebuildSelector0() {
         final Selector oldSelector = selector;
         final SelectorTuple newSelectorTuple;
@@ -434,6 +437,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
     @Override
     protected void run() {
         int selectCnt = 0;
+        // 循环监听selectkey
         for (;;) {
             try {
                 int strategy;
@@ -506,6 +510,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
                                 selectCnt - 1, selector);
                     }
                     selectCnt = 0;
+                    //
                 } else if (unexpectedSelectorWakeup(selectCnt)) { // Unexpected wakeup (unusual case)
                     selectCnt = 0;
                 }
@@ -552,6 +557,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
             }
             return true;
         }
+        // 如果每次轮询消耗的时间为 0，且重复次数超过 512 次，则调用 rebuildSelector()方法
         if (SELECTOR_AUTO_REBUILD_THRESHOLD > 0 &&
                 selectCnt >= SELECTOR_AUTO_REBUILD_THRESHOLD) {
             // The selector returned prematurely many times in a row.
@@ -611,6 +617,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
 
         Iterator<SelectionKey> i = selectedKeys.iterator();
+        // 监听selectkey
         for (;;) {
             final SelectionKey k = i.next();
             final Object a = k.attachment();
@@ -670,6 +677,7 @@ public final class NioEventLoop extends SingleThreadEventLoop {
         }
     }
 
+    // 处理selectkey
     private void processSelectedKey(SelectionKey k, AbstractNioChannel ch) {
         final AbstractNioChannel.NioUnsafe unsafe = ch.unsafe();
         if (!k.isValid()) {

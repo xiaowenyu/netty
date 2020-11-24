@@ -63,6 +63,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
      * @param ch                the underlying {@link SelectableChannel} on which it operates
      */
     protected AbstractNioByteChannel(Channel parent, SelectableChannel ch) {
+        // nio 读操作
         super(parent, ch, SelectionKey.OP_READ);
     }
 
@@ -75,6 +76,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
         return false;
     }
 
+    // 客户端实现这个
     @Override
     protected AbstractNioUnsafe newUnsafe() {
         return new NioByteUnsafe();

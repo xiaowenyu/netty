@@ -823,10 +823,12 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
         execute(ObjectUtil.checkNotNull(task, "task"), false);
     }
 
+    // 是创建线程，将线程添加到 EventLoop 的无锁化串行任务队列
     private void execute(Runnable task, boolean immediate) {
         boolean inEventLoop = inEventLoop();
         addTask(task);
         if (!inEventLoop) {
+            //开启线程
             startThread();
             if (isShutdown()) {
                 boolean reject = false;
@@ -944,6 +946,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
             if (STATE_UPDATER.compareAndSet(this, ST_NOT_STARTED, ST_STARTED)) {
                 boolean success = false;
                 try {
+                    //开启线程
                     doStartThread();
                     success = true;
                 } finally {
@@ -986,6 +989,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
                 boolean success = false;
                 updateLastExecutionTime();
                 try {
+                    // boss线程执行
                     SingleThreadEventExecutor.this.run();
                     success = true;
                 } catch (Throwable t) {

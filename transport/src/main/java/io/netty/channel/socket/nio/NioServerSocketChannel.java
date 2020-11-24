@@ -60,6 +60,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
              *
              *  See <a href="https://github.com/netty/netty/issues/2308">#2308</a>.
              */
+            // server
             return provider.openServerSocketChannel();
         } catch (IOException e) {
             throw new ChannelException(
@@ -88,7 +89,7 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
      * Create a new instance using the given {@link ServerSocketChannel}.
      */
     public NioServerSocketChannel(ServerSocketChannel channel) {
-        // selector的接收指令
+        // selector的接收指令，accept
         super(null, channel, SelectionKey.OP_ACCEPT);
         config = new NioServerSocketChannelConfig(this, javaChannel().socket());
     }
@@ -145,6 +146,8 @@ public class NioServerSocketChannel extends AbstractNioMessageChannel
         javaChannel().close();
     }
 
+    // 实当一个 client 连接到 server 时，Java 底层 NIO 的 ServerSocketChannel
+    // 就会有一个 SelectionKey.OP_ACCEPT 的事件就绪，接着就会调用到 NioServerSocketChannel 的 doReadMessages()
     @Override
     protected int doReadMessages(List<Object> buf) throws Exception {
         SocketChannel ch = SocketUtils.accept(javaChannel());
