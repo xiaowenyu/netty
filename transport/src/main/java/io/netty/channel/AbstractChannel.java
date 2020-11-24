@@ -296,7 +296,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
         return pipeline.writeAndFlush(msg);
     }
 
-    // 编码、写buffer和promise入口
+    //写buffer和promise入口
     @Override
     public ChannelFuture writeAndFlush(Object msg, ChannelPromise promise) {
         return pipeline.writeAndFlush(msg, promise);

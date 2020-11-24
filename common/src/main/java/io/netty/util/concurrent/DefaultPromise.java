@@ -488,6 +488,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
             if (stackDepth < MAX_LISTENER_STACK_DEPTH) {
                 threadLocals.setFutureListenerStackDepth(stackDepth + 1);
                 try {
+                    // 唤醒
                     notifyListenersNow();
                 } finally {
                     threadLocals.setFutureListenerStackDepth(stackDepth);
@@ -549,6 +550,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
             if (listeners instanceof DefaultFutureListeners) {
                 notifyListeners0((DefaultFutureListeners) listeners);
             } else {
+                // 执行观察者的方法
                 notifyListener0(this, (GenericFutureListener<?>) listeners);
             }
             synchronized (this) {
@@ -576,6 +578,7 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
     private static void notifyListener0(Future future, GenericFutureListener l) {
         try {
             // 处理结果
+            // 具体的执行方法
             l.operationComplete(future);
         } catch (Throwable t) {
             if (logger.isWarnEnabled()) {
@@ -610,11 +613,13 @@ public class DefaultPromise<V> extends AbstractFuture<V> implements Promise<V> {
         return setValue0(new CauseHolder(checkNotNull(cause, "cause")));
     }
 
+    // 设置事件状态
     private boolean setValue0(Object objResult) {
         // 设置成功状态
         if (RESULT_UPDATER.compareAndSet(this, null, objResult) ||
             RESULT_UPDATER.compareAndSet(this, UNCANCELLABLE, objResult)) {
             if (checkNotifyWaiters()) {
+                // 唤醒监听者
                 notifyListeners();
             }
             return true;

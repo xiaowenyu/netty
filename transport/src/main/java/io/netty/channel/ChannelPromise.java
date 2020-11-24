@@ -22,6 +22,7 @@ import io.netty.util.concurrent.Promise;
 /**
  * Special {@link ChannelFuture} which is writable.
  */
+// 异步回调类
 public interface ChannelPromise extends ChannelFuture, Promise<Void> {
 
     @Override
