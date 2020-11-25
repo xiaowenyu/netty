@@ -32,6 +32,7 @@ import java.util.List;
 /**
  * {@link AbstractNioChannel} base class for {@link Channel}s that operate on messages.
  */
+//操作消息的基础类
 public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
     boolean inputShutdown;
 
@@ -60,6 +61,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
 
         private final List<Object> readBuf = new ArrayList<Object>();
 
+        // 客户端accept进来
         @Override
         public void read() {
             assert eventLoop().inEventLoop();
@@ -83,6 +85,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
                         }
 
                         allocHandle.incMessagesRead(localRead);
+                        // 轮询
                     } while (allocHandle.continueReading());
                 } catch (Throwable t) {
                     exception = t;
@@ -91,6 +94,7 @@ public abstract class AbstractNioMessageChannel extends AbstractNioChannel {
                 int size = readBuf.size();
                 for (int i = 0; i < size; i ++) {
                     readPending = false;
+                    // 传播并生成channel读buf
                     pipeline.fireChannelRead(readBuf.get(i));
                 }
                 readBuf.clear();

@@ -155,7 +155,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
                     pipeline.addLast(handler);
                 }
 
-                // ?????
+                // channelRead()方法会为新建 的 Channel 设置 handler 并注册到一个 eventLoop 中
                 ch.eventLoop().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -213,8 +213,9 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
         @Override
         @SuppressWarnings("unchecked")
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            // 处理读事件，得到传播过来的channel
             final Channel child = (Channel) msg;
-
+            // 绑定channelInitializer
             child.pipeline().addLast(childHandler);
 
             setChannelOptions(child, childOptions, logger);
@@ -222,7 +223,7 @@ public class ServerBootstrap extends AbstractBootstrap<ServerBootstrap, ServerCh
 
             try {
                 //workerGroup 对象
-                // 是将 workerGroup 中的 某个 EventLoop 和 NioSocketChannel 关联上了
+                // 是将 workerGroup 中的 某个 EventLoop 和 传播过来的NioSocketChannel 关联上了
                 childGroup.register(child).addListener(new ChannelFutureListener() {
                     @Override
                     public void operationComplete(ChannelFuture future) throws Exception {

@@ -922,6 +922,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelPipeline fireChannelRead(Object msg) {
+        //调用read 传播事件
         AbstractChannelHandlerContext.invokeChannelRead(head, msg);
         return this;
     }
@@ -1300,6 +1301,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
             onUnhandledInboundException(cause);
         }
 
+        //处理读事件
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
             onUnhandledInboundMessage(ctx, msg);
@@ -1420,6 +1422,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) {
+            // head 处理read 事件
             ctx.fireChannelRead(msg);
         }
 

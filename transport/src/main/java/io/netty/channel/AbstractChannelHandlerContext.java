@@ -355,6 +355,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
 
     @Override
     public ChannelHandlerContext fireChannelRead(final Object msg) {
+        // ctx 处理读事件
         invokeChannelRead(findContextInbound(MASK_CHANNEL_READ), msg);
         return this;
     }
@@ -382,6 +383,7 @@ abstract class AbstractChannelHandlerContext implements ChannelHandlerContext, R
                 invokeExceptionCaught(t);
             }
         } else {
+            // 传播事件
             fireChannelRead(msg);
         }
     }
