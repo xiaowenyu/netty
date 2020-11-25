@@ -44,6 +44,7 @@ import static io.netty.util.internal.ObjectUtil.checkPositiveOrZero;
 /**
  * A skeletal implementation of a buffer.
  */
+// ByteBuf 入口类
 public abstract class AbstractByteBuf extends ByteBuf {
     private static final InternalLogger logger = InternalLoggerFactory.getInstance(AbstractByteBuf.class);
     private static final String LEGACY_PROP_CHECK_ACCESSIBLE = "io.netty.buffer.bytebuf.checkAccessible";
@@ -68,10 +69,15 @@ public abstract class AbstractByteBuf extends ByteBuf {
     static final ResourceLeakDetector<ByteBuf> leakDetector =
             ResourceLeakDetectorFactory.instance().newResourceLeakDetector(ByteBuf.class);
 
+    // 读位置
     int readerIndex;
+    // 写位置
     int writerIndex;
+    //mark 之后的读指针
     private int markedReaderIndex;
+    //mark 之后的写指针
     private int markedWriterIndex;
+    // 最大容量
     private int maxCapacity;
 
     protected AbstractByteBuf(int maxCapacity) {

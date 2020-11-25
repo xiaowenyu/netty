@@ -26,6 +26,7 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 
+// 池化内存，就是从预先分配好的内存空间中提取一段连续内存封装成一个 ByteBuf 分给应用程序使用。
 abstract class PooledByteBuf<T> extends AbstractReferenceCountedByteBuf {
 
     private final Handle<PooledByteBuf<T>> recyclerHandle;
