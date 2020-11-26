@@ -72,6 +72,7 @@ abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
     // TODO: Test if adding padding helps under contention
     //private long pad0, pad1, pad2, pad3, pad4, pad5, pad6, pad7;
 
+    // 生成池化的内存
     protected PoolArena(PooledByteBufAllocator parent, int pageSize,
           int pageShifts, int chunkSize, int cacheAlignment) {
         super(pageSize, pageShifts, chunkSize, cacheAlignment);
@@ -106,6 +107,7 @@ abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
         metrics.add(q050);
         metrics.add(q075);
         metrics.add(q100);
+        // 池化集合
         chunkListMetrics = Collections.unmodifiableList(metrics);
     }
 

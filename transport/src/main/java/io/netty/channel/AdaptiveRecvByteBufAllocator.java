@@ -164,6 +164,9 @@ public class AdaptiveRecvByteBufAllocator extends DefaultMaxMessagesRecvByteBufA
      * @param minimum  the inclusive lower bound of the expected buffer size
      * @param initial  the initial buffer size when no feed back was received
      * @param maximum  the inclusive upper bound of the expected buffer size
+     *     * @param最低预期的缓冲区大小的包容性的下界
+     * 　　* @param最初最初的缓冲区大小,还没有收到任何反馈
+     * 　　* @param最大的包容性上界预期的缓冲区大小
      */
     public AdaptiveRecvByteBufAllocator(int minimum, int initial, int maximum) {
         checkPositive(minimum, "minimum");

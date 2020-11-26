@@ -144,6 +144,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
     @Override
     public ByteBufAllocator alloc() {
+        // 获得默认的内存分配器
         return config().getAllocator();
     }
 
@@ -880,6 +881,7 @@ public abstract class AbstractChannel extends DefaultAttributeMap implements Cha
 
             int size;
             try {
+                // 分配内存入口
                 msg = filterOutboundMessage(msg);
                 size = pipeline.estimatorHandle().size(msg);
                 if (size < 0) {

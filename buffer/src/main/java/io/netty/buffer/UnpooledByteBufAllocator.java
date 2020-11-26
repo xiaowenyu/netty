@@ -33,6 +33,7 @@ public final class UnpooledByteBufAllocator extends AbstractByteBufAllocator imp
     /**
      * Default instance which uses leak-detection for direct buffers.
      */
+    //内存分配器的单例
     public static final UnpooledByteBufAllocator DEFAULT =
             new UnpooledByteBufAllocator(PlatformDependent.directBufferPreferred());
 

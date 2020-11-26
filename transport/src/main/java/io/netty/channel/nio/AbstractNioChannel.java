@@ -434,6 +434,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         final int readableBytes = buf.readableBytes();
         if (readableBytes == 0) {
             ReferenceCountUtil.safeRelease(buf);
+            // 返回空的buffer
             return Unpooled.EMPTY_BUFFER;
         }
 
@@ -453,6 +454,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         }
 
         // Allocating and deallocating an unpooled direct buffer is very expensive; give up.
+        // 分配和释放一个未共享直接缓冲区非常昂贵;放弃。
         return buf;
     }
 

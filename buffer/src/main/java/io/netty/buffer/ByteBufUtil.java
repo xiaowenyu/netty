@@ -82,6 +82,7 @@ public final class ByteBufUtil {
         if ("unpooled".equals(allocType)) {
             alloc = UnpooledByteBufAllocator.DEFAULT;
             logger.debug("-Dio.netty.allocator.type: {}", allocType);
+            // 非安卓用池化
         } else if ("pooled".equals(allocType)) {
             alloc = PooledByteBufAllocator.DEFAULT;
             logger.debug("-Dio.netty.allocator.type: {}", allocType);
@@ -90,6 +91,7 @@ public final class ByteBufUtil {
             logger.debug("-Dio.netty.allocator.type: pooled (unknown: {})", allocType);
         }
 
+        // 设置默认的内存分配器
         DEFAULT_ALLOCATOR = alloc;
 
         THREAD_LOCAL_BUFFER_SIZE = SystemPropertyUtil.getInt("io.netty.threadLocalDirectBufferSize", 0);
