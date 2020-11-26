@@ -279,6 +279,7 @@ public abstract class AbstractNioByteChannel extends AbstractNioChannel {
                 return msg;
             }
 
+            // 返回buf
             return newDirectBuffer(buf);
         }
 

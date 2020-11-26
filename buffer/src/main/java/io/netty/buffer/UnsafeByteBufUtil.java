@@ -31,6 +31,7 @@ import static io.netty.util.internal.PlatformDependent.BIG_ENDIAN_NATIVE_ORDER;
 /**
  * All operations get and set as {@link ByteOrder#BIG_ENDIAN}.
  */
+// 直接操作内存工具类
 final class UnsafeByteBufUtil {
     private static final boolean UNALIGNED = PlatformDependent.isUnaligned();
     private static final byte ZERO = 0;
@@ -468,6 +469,7 @@ final class UnsafeByteBufUtil {
             throw new IndexOutOfBoundsException("dstIndex: " + dstIndex);
         }
 
+        // 存在内存地址，直接使用unsafe工具类调用
         if (dst.hasMemoryAddress()) {
             PlatformDependent.copyMemory(addr, dst.memoryAddress() + dstIndex, length);
         } else if (dst.hasArray()) {

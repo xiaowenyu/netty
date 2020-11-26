@@ -21,6 +21,7 @@ package io.netty.buffer;
  */
 public interface ByteBufAllocator {
 
+    // 默认的内存分配器
     ByteBufAllocator DEFAULT = ByteBufUtil.DEFAULT_ALLOCATOR;
 
     /**
