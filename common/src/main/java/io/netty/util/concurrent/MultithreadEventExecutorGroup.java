@@ -73,6 +73,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         }
 
         if (executor == null) {
+            // 线程工厂类，netty默认的线程工厂
             executor = new ThreadPerTaskExecutor(newDefaultThreadFactory());
         }
 
@@ -82,7 +83,7 @@ public abstract class MultithreadEventExecutorGroup extends AbstractEventExecuto
         for (int i = 0; i < nThreads; i ++) {
             boolean success = false;
             try {
-                // 新建NioEventLoop
+                // 新建线程（NioEventLoop），到后面到了singleThreadPool
                 children[i] = newChild(executor, args);
                 success = true;
             } catch (Exception e) {

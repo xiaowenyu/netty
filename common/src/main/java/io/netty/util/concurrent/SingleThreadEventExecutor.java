@@ -815,6 +815,7 @@ public abstract class SingleThreadEventExecutor extends AbstractScheduledEventEx
     @Override
     public void execute(Runnable task) {
         ObjectUtil.checkNotNull(task, "task");
+        // 把传播的IO事件封装成task
         execute(task, !(task instanceof LazyRunnable) && wakesUpForTask(task));
     }
 

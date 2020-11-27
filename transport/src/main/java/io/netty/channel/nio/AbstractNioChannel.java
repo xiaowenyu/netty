@@ -205,6 +205,7 @@ public abstract class AbstractNioChannel extends AbstractChannel {
         /**
          * Read from underlying {@link SelectableChannel}
          */
+        // 读事件
         void read();
 
         void forceFlush();

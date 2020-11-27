@@ -217,6 +217,7 @@ public class Lz4FrameEncoder extends MessageToByteEncoder<ByteBuf> {
             return Unpooled.EMPTY_BUFFER;
         }
 
+        //分配内存
         if (preferDirect) {
             return ctx.alloc().ioBuffer(targetBufSize, targetBufSize);
         } else {
