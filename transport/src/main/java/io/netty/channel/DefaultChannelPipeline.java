@@ -370,11 +370,6 @@ public class DefaultChannelPipeline implements ChannelPipeline {
     }
 
     @Override
-    public final ChannelPipeline addLast(ChannelHandler... handlers) {
-        return addLast(null, handlers);
-    }
-
-    @Override
     public final ChannelPipeline addLast(EventExecutorGroup executor, ChannelHandler... handlers) {
         ObjectUtil.checkNotNull(handlers, "handlers");
 
@@ -386,6 +381,11 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         }
 
         return this;
+    }
+
+    @Override
+    public final ChannelPipeline addLast(ChannelHandler... handlers) {
+        return addLast(null, handlers);
     }
 
     private String generateName(ChannelHandler handler) {
@@ -898,6 +898,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
 
     @Override
     public final ChannelPipeline fireChannelActive() {
+        // inbound 事件触发
         AbstractChannelHandlerContext.invokeChannelActive(head);
         return this;
     }
@@ -1251,6 +1252,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
         }
     }
 
+    // 打日志
     // A special catch-all handler that handles both bytes and messages.
     final class TailContext extends AbstractChannelHandlerContext implements ChannelInboundHandler {
 
@@ -1370,6 +1372,7 @@ public class DefaultChannelPipeline implements ChannelPipeline {
             unsafe.deregister(promise);
         }
 
+        // ????
         @Override
         public void read(ChannelHandlerContext ctx) {
             // 读

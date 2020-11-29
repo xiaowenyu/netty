@@ -131,6 +131,7 @@ abstract class PoolArena<T> extends SizeClasses implements PoolArenaMetric {
         return buf;
     }
 
+    //分配内存
     private void allocate(PoolThreadCache cache, PooledByteBuf<T> buf, final int reqCapacity) {
         final int sizeIdx = size2SizeIdx(reqCapacity);
 

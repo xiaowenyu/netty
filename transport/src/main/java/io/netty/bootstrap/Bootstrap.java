@@ -264,7 +264,7 @@ public class Bootstrap extends AbstractBootstrap<Bootstrap, Channel> {
     void init(Channel channel) {
         // 通道反射的时候已经生成pipeline
         ChannelPipeline p = channel.pipeline();
-        // 是ChannelInitializer
+        // 是ChannelInitializer解析
         p.addLast(config.handler());
 
         setChannelOptions(channel, newOptionsArray(), logger);
