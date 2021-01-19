@@ -96,6 +96,7 @@ import java.util.concurrent.TimeUnit;
  * @see ReadTimeoutHandler
  * @see WriteTimeoutHandler
  */
+// 心跳检测handler
 public class IdleStateHandler extends ChannelDuplexHandler {
     private static final long MIN_TIMEOUT_NANOS = TimeUnit.MILLISECONDS.toNanos(1);
 
@@ -111,6 +112,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
     private final boolean observeOutput;
     private final long readerIdleTimeNanos;
     private final long writerIdleTimeNanos;
+    // 心跳检测时间
     private final long allIdleTimeNanos;
 
     private ScheduledFuture<?> readerIdleTimeout;
@@ -121,6 +123,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
     private long lastWriteTime;
     private boolean firstWriterIdleEvent = true;
 
+    // 心跳检测回调
     private ScheduledFuture<?> allIdleTimeout;
     private boolean firstAllIdleEvent = true;
 
@@ -148,6 +151,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
      *        will be triggered when neither read nor write was performed for
      *        the specified period of time.  Specify {@code 0} to disable.
      */
+    //初始化 设置超时时间
     public IdleStateHandler(
             int readerIdleTimeSeconds,
             int writerIdleTimeSeconds,
@@ -208,6 +212,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
         if (allIdleTime <= 0) {
             allIdleTimeNanos = 0;
         } else {
+            //设置超时时间
             allIdleTimeNanos = Math.max(unit.toNanos(allIdleTime), MIN_TIMEOUT_NANOS);
         }
     }
@@ -267,6 +272,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
         // This method will be invoked only if this handler was added
         // before channelActive() event is fired.  If a user adds this handler
         // after the channelActive() event, initialize() will be called by beforeAdd().
+        // channel 存活的时候启动初始化
         initialize(ctx);
         super.channelActive(ctx);
     }
@@ -280,6 +286,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         if (readerIdleTimeNanos > 0 || allIdleTimeNanos > 0) {
+            // 设置读状态
             reading = true;
             firstReaderIdleEvent = firstAllIdleEvent = true;
         }
@@ -289,6 +296,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         if ((readerIdleTimeNanos > 0 || allIdleTimeNanos > 0) && reading) {
+            // 设置上次读完成状态
             lastReadTime = ticksInNanos();
             reading = false;
         }
@@ -327,6 +335,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
                     writerIdleTimeNanos, TimeUnit.NANOSECONDS);
         }
         if (allIdleTimeNanos > 0) {
+            // 定时检测 存活状态
             allIdleTimeout = schedule(ctx, new AllIdleTimeoutTask(ctx),
                     allIdleTimeNanos, TimeUnit.NANOSECONDS);
         }
@@ -547,6 +556,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
         }
     }
 
+    // 检测存活任务
     private final class AllIdleTimeoutTask extends AbstractIdleTask {
 
         AllIdleTimeoutTask(ChannelHandlerContext ctx) {
@@ -557,6 +567,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
         protected void run(ChannelHandlerContext ctx) {
 
             long nextDelay = allIdleTimeNanos;
+            // 读状态中的跳过
             if (!reading) {
                 nextDelay -= ticksInNanos() - Math.max(lastReadTime, lastWriteTime);
             }
@@ -574,6 +585,7 @@ public class IdleStateHandler extends ChannelDuplexHandler {
                     }
 
                     IdleStateEvent event = newIdleStateEvent(IdleState.ALL_IDLE, first);
+                    // 传播 超时事件
                     channelIdle(ctx, event);
                 } catch (Throwable t) {
                     ctx.fireExceptionCaught(t);
