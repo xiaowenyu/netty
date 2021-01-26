@@ -113,6 +113,7 @@ public final class PlatformDependent {
 
     private static final int ADDRESS_SIZE = addressSize0();
     private static final boolean USE_DIRECT_BUFFER_NO_CLEANER;
+    // 直接内存统计数量
     private static final AtomicLong DIRECT_MEMORY_COUNTER;
     private static final long DIRECT_MEMORY_LIMIT;
     private static final ThreadLocalRandomProvider RANDOM_PROVIDER;
@@ -175,6 +176,7 @@ public final class PlatformDependent {
             }
         }
         logger.debug("-Dio.netty.maxDirectMemory: {} bytes", maxDirectMemory);
+        // 默认直接内存范围是当前最大内存
         DIRECT_MEMORY_LIMIT = maxDirectMemory >= 1 ? maxDirectMemory : MAX_DIRECT_MEMORY;
 
         int tryAllocateUninitializedArray =
@@ -724,6 +726,7 @@ public final class PlatformDependent {
      * Allocate a new {@link ByteBuffer} with the given {@code capacity}. {@link ByteBuffer}s allocated with
      * this method <strong>MUST</strong> be deallocated via {@link #freeDirectNoCleaner(ByteBuffer)}.
      */
+    // 分配直接内存
     public static ByteBuffer allocateDirectNoCleaner(int capacity) {
         assert USE_DIRECT_BUFFER_NO_CLEANER;
 

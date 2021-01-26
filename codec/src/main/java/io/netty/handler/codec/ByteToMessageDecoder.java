@@ -83,6 +83,7 @@ public abstract class ByteToMessageDecoder extends ChannelInboundHandlerAdapter 
         public ByteBuf cumulate(ByteBufAllocator alloc, ByteBuf cumulation, ByteBuf in) {
             if (!cumulation.isReadable() && in.isContiguous()) {
                 // If cumulation is empty and input buffer is contiguous, use it directly
+                // 如果 cumulation 是空的 和 输入是连续的，直接用输入的
                 cumulation.release();
                 return in;
             }
@@ -153,6 +154,7 @@ public abstract class ByteToMessageDecoder extends ChannelInboundHandlerAdapter 
     private static final byte STATE_CALLING_CHILD_DECODE = 1;
     private static final byte STATE_HANDLER_REMOVED_PENDING = 2;
 
+    // 存储的buffer 对象?
     ByteBuf cumulation;
     private Cumulator cumulator = MERGE_CUMULATOR;
     private boolean singleDecode;
@@ -275,7 +277,7 @@ public abstract class ByteToMessageDecoder extends ChannelInboundHandlerAdapter 
             CodecOutputList out = CodecOutputList.newInstance();
             try {
                 first = cumulation == null;
-                // 合并多段报文
+                // 如果first为true，代表是第一段，合并多段报文
                 cumulation = cumulator.cumulate(ctx.alloc(),
                         first ? Unpooled.EMPTY_BUFFER : cumulation, (ByteBuf) msg);
                 // 调用 解码

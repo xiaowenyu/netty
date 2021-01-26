@@ -217,6 +217,7 @@ public class Bootstrap extends AbstractBootstrap<Bootstrap, Channel> {
                     promise.setFailure(resolveFailureCause);
                 } else {
                     // Succeeded to resolve immediately; cached? (or did a blocking lookup)
+                    //
                     doConnect(resolveFuture.getNow(), localAddress, promise);
                 }
                 return promise;
